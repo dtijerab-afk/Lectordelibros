@@ -1,0 +1,8 @@
+{
+  "name": "Remix DocuMind AI — Analizador y Evaluador de Documentos",
+  "description": "Aplicación web interactiva para análisis inteligente de documentos PDF, generación de resúmenes ejecutivos, cuestionarios de evaluación dinámicos y asistente RAG contextual.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
