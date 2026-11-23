@@ -40,10 +40,15 @@ import {
   generateMarkdownReport,
 } from './utils/pdfAndExport';
 
-const HERO_ILLUSTRATION = '/src/assets/images/editorial_reading_studio_hero_1794091696482.jpg';
-const SYNTHESIS_ILLUSTRATION = '/src/assets/images/schema_book_synthesis_art_1794091697552.jpg';
-const COMPASS_ILLUSTRATION = '/src/assets/images/schema_chapter_compass_art_1794091699649.jpg';
-const QUIZ_ILLUSTRATION = '/src/assets/images/schema_quiz_mastery_art_1794091699280.jpg';
+import heroIllustrationUrl from './assets/images/editorial_reading_studio_hero_1794091696482.jpg';
+import synthesisIllustrationUrl from './assets/images/schema_book_synthesis_art_1794091697552.jpg';
+import compassIllustrationUrl from './assets/images/schema_chapter_compass_art_1794091699649.jpg';
+import quizIllustrationUrl from './assets/images/schema_quiz_mastery_art_1794091699280.jpg';
+
+const HERO_ILLUSTRATION = heroIllustrationUrl;
+const SYNTHESIS_ILLUSTRATION = synthesisIllustrationUrl;
+const COMPASS_ILLUSTRATION = compassIllustrationUrl;
+const QUIZ_ILLUSTRATION = quizIllustrationUrl;
 
 type ActiveTab = 'summary' | 'explorer' | 'quiz' | 'chat';
 
@@ -256,7 +261,7 @@ export default function App() {
 
     setErrorMessage('');
     setLoadingMessage(
-      `Analizando el 90% del contenido de "${nameOfBook}" (capítulos detallados, conceptos y mapa)...`
+      `Analizando el 100% del contenido de "${nameOfBook}" (capítulos detallados, conceptos y mapa)...`
     );
     setLoadingProgress(45);
 
@@ -579,7 +584,7 @@ export default function App() {
   const activeChapter = chaptersList[activeChapterIdx] || chaptersList[0];
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FAF7F2] text-stone-900">
+    <div className="min-h-dvh flex flex-col bg-[#FAF7F2] text-stone-900 overflow-x-clip pb-20 md:pb-0">
       {/* Hidden global file input */}
       <input
         ref={fileInputRef}
@@ -592,7 +597,7 @@ export default function App() {
       {/* =====================================================================
           TOP BAR CONTRACT (3 Zones: Brand Wordmark, 4 Nav Links, 1 Primary CTA)
           ===================================================================== */}
-      <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur border-b border-stone-200/90 px-6 py-3.5 flex items-center justify-between gap-8 no-print">
+      <header className="sticky top-0 z-30 bg-[#FAF7F2]/95 backdrop-blur border-b border-stone-200/90 px-3.5 sm:px-6 py-3 sm:py-3.5 flex items-center justify-between gap-3 sm:gap-8 no-print">
         {/* Zone 1: Single text element wordmark */}
         <a
           href="#workspace"
@@ -600,7 +605,7 @@ export default function App() {
             e.preventDefault();
             handleNavigateTab('summary');
           }}
-          className="text-lg font-bold tracking-tight text-indigo-950 whitespace-nowrap shrink-0 font-display"
+          className="text-base sm:text-lg font-bold tracking-tight text-indigo-950 whitespace-nowrap shrink-0 font-display"
         >
           LecturaViva
         </a>
@@ -654,15 +659,16 @@ export default function App() {
         </nav>
 
         {/* Zone 3: 1 primary action */}
-        <div className="flex items-center gap-3 shrink-0">
+        <div className="flex items-center gap-2 shrink-0">
           {hasLoadedBook ? (
             <button
               type="button"
               onClick={handleExportMarkdown}
-              className="px-4 py-2 text-xs font-semibold text-white bg-indigo-950 rounded-lg hover:bg-indigo-900 transition-colors whitespace-nowrap shrink-0 flex items-center gap-2 cursor-pointer"
+              className="px-3 sm:px-4 py-2 text-xs font-semibold text-white bg-indigo-950 rounded-lg hover:bg-indigo-900 transition-colors whitespace-nowrap shrink-0 flex items-center gap-1.5 sm:gap-2 cursor-pointer"
             >
               <Download className="w-3.5 h-3.5 text-amber-400" />
-              <span>Descargar Guía</span>
+              <span className="sm:hidden">Guía</span>
+              <span className="hidden sm:inline">Descargar Guía</span>
             </button>
           ) : (
             <button
@@ -672,53 +678,14 @@ export default function App() {
                 setManualTextDraft('');
                 setShowManualTextModal(true);
               }}
-              className="px-4 py-2 text-xs font-semibold text-indigo-950 bg-amber-100/90 border border-amber-300/80 rounded-lg hover:bg-amber-200/80 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="px-3 sm:px-4 py-2 text-xs font-semibold text-indigo-950 bg-amber-100/90 border border-amber-300/80 rounded-lg hover:bg-amber-200/80 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
             >
-              Pegar Texto de un Libro
+              <span className="sm:hidden">Pegar Texto</span>
+              <span className="hidden sm:inline">Pegar Texto de un Libro</span>
             </button>
           )}
         </div>
       </header>
-
-      {/* Mobile Segmented Navigation (Always visible on mobile/tablet so navigation always works) */}
-      <div className="md:hidden bg-white border-b border-stone-200 px-4 py-2 flex items-center gap-1 overflow-x-auto no-print">
-        <button
-          type="button"
-          onClick={() => handleNavigateTab('summary')}
-          className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap shrink-0 cursor-pointer ${
-            activeTab === 'summary' ? 'bg-indigo-950 text-white' : 'text-stone-600 hover:text-indigo-950'
-          }`}
-        >
-          Mapa y Resumen {hasLoadedBook ? `(${chapterProgressPercent}%)` : ''}
-        </button>
-        <button
-          type="button"
-          onClick={() => handleNavigateTab('explorer')}
-          className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap shrink-0 cursor-pointer ${
-            activeTab === 'explorer' ? 'bg-indigo-950 text-white' : 'text-stone-600 hover:text-indigo-950'
-          }`}
-        >
-          Ruta de Capítulos {hasLoadedBook ? `(${exploredChaptersCount}/${chaptersList.length})` : ''}
-        </button>
-        <button
-          type="button"
-          onClick={() => handleNavigateTab('quiz')}
-          className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap shrink-0 cursor-pointer ${
-            activeTab === 'quiz' ? 'bg-indigo-950 text-white' : 'text-stone-600 hover:text-indigo-950'
-          }`}
-        >
-          Evaluación {hasLoadedBook ? `(${totalCorrect}/${totalQuestions})` : ''}
-        </button>
-        <button
-          type="button"
-          onClick={() => handleNavigateTab('chat')}
-          className={`px-3 py-1.5 text-xs font-medium rounded-md whitespace-nowrap shrink-0 cursor-pointer ${
-            activeTab === 'chat' ? 'bg-indigo-950 text-white' : 'text-stone-600 hover:text-indigo-950'
-          }`}
-        >
-          Dialogar con el Libro
-        </button>
-      </div>
 
       {/* =====================================================================
           MAIN WORKSPACE CONTAINER
@@ -730,32 +697,32 @@ export default function App() {
            ===================================================================== */
         <main
           id="workspace"
-          className="max-w-[1280px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10 space-y-8 flex-1"
+          className="max-w-[1280px] w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-10 space-y-5 sm:space-y-8 flex-1"
         >
           {activeTab === 'summary' && (
             <>
               {/* Hero Split: Editorial Illustration + Single Book Dropzone */}
               <section className="bg-white border border-stone-200/90 rounded-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12 items-stretch">
                 {/* Left Column: Visual Emblem, Editorial Headline & Single Upload Zone */}
-                <div className="lg:col-span-7 p-6 sm:p-10 flex flex-col justify-between space-y-6">
-                  <div className="space-y-4">
-                    <div className="inline-flex items-center gap-3">
-                      <div className="w-11 h-11 rounded-xl bg-indigo-950 text-amber-400 flex items-center justify-center shrink-0">
-                        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
+                <div className="lg:col-span-7 p-4 sm:p-10 flex flex-col justify-between space-y-5 sm:space-y-6">
+                  <div className="space-y-3 sm:space-y-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-xl bg-indigo-950 text-amber-400 flex items-center justify-center shrink-0">
+                        <svg className="w-5 h-5 sm:w-6 sm:h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.75">
                           <path d="M2 6.5C2 5.4 2.9 4.5 4 4.5H10C11.1 4.5 12 5.4 12 6.5V19.5C12 18.4 11.1 17.5 10 17.5H4C2.9 17.5 2 18.4 2 19.5V6.5Z" />
                           <path d="M22 6.5C22 5.4 21.1 4.5 20 4.5H14C12.9 4.5 12 5.4 12 6.5V19.5C12 18.4 12.9 17.5 14 17.5H20C21.1 17.5 22 18.4 22 19.5V6.5Z" />
                           <circle cx="12" cy="9" r="1.5" fill="currentColor" />
                         </svg>
                       </div>
-                      <div className="text-xs text-stone-500">
+                      <div className="text-[11px] sm:text-xs text-stone-500 leading-snug">
                         <span>Estudio Profundo de Libros</span>
                         <span aria-hidden="true"> · </span>
-                        <span>Cobertura del 90% del Contenido Capítulo a Capítulo</span>
+                        <span>Cobertura del 100% del Contenido Capítulo a Capítulo</span>
                       </div>
                     </div>
 
-                    <h1 className="text-2xl sm:text-4xl font-bold text-indigo-950 tracking-tight leading-tight">
-                      Domina el 90% de cualquier libro con mapas visuales y capítulos detallados
+                    <h1 className="text-xl sm:text-4xl font-bold text-indigo-950 tracking-tight leading-tight">
+                      Domina el 100% de cualquier libro con mapas visuales y capítulos detallados
                     </h1>
 
                     <p className="text-sm sm:text-base text-stone-600 leading-relaxed max-w-2xl">
@@ -776,7 +743,7 @@ export default function App() {
                         fileInputRef.current?.click();
                       }
                     }}
-                    className={`border-2 border-dashed rounded-xl p-6 sm:p-8 text-center transition-colors ${
+                    className={`border-2 border-dashed rounded-xl p-5 sm:p-8 text-center transition-colors ${
                       loadingMessage
                         ? 'border-amber-400 bg-amber-50/50 cursor-wait'
                         : isDragging
@@ -789,7 +756,7 @@ export default function App() {
                         <RefreshCw className="w-7 h-7 text-amber-700 animate-spin mx-auto" />
                         <div className="text-sm font-semibold text-indigo-950">{loadingMessage}</div>
                         {fileName && (
-                          <div className="text-xs text-stone-600 font-mono tabular-nums">
+                          <div className="text-xs text-stone-600 font-mono tabular-nums break-words">
                             {fileName} {pageCount > 0 ? `· ${pageCount} páginas procesadas` : ''}
                           </div>
                         )}
@@ -805,7 +772,7 @@ export default function App() {
                         <div className="w-12 h-12 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center mx-auto">
                           <FileUp className="w-6 h-6" />
                         </div>
-                        <p className="text-base font-bold text-indigo-950">
+                        <p className="text-sm sm:text-base font-bold text-indigo-950">
                           Selecciona o arrastra aquí tu libro (PDF o TXT)
                         </p>
                         <p className="text-xs text-stone-500">
@@ -819,18 +786,20 @@ export default function App() {
                   {errorMessage && (
                     <div
                       role="alert"
-                      className="p-4 rounded-xl bg-rose-50 border border-rose-200 flex items-start gap-3 text-xs text-rose-950"
+                      className="p-3.5 sm:p-4 rounded-xl bg-rose-50 border border-rose-200 flex flex-col sm:flex-row sm:items-start gap-3 text-xs text-rose-950"
                     >
-                      <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
-                      <div className="flex-1 space-y-1">
-                        <p className="font-semibold">Atención</p>
-                        <p className="leading-relaxed">{errorMessage}</p>
+                      <div className="flex items-start gap-2.5 flex-1">
+                        <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0 mt-0.5" />
+                        <div className="flex-1 space-y-1 min-w-0">
+                          <p className="font-semibold">Atención</p>
+                          <p className="leading-relaxed break-words">{errorMessage}</p>
+                        </div>
                       </div>
                       {documentText.trim().length >= 20 && (
                         <button
                           type="button"
                           onClick={() => runFullAiPipeline(documentText, fileName || 'Libro')}
-                          className="px-3 py-1.5 bg-rose-900 text-white font-semibold rounded-md hover:bg-rose-800 cursor-pointer whitespace-nowrap"
+                          className="px-3 py-2 bg-rose-900 text-white font-semibold rounded-md hover:bg-rose-800 cursor-pointer whitespace-nowrap self-start"
                         >
                           Reintentar
                         </button>
@@ -840,7 +809,7 @@ export default function App() {
                 </div>
 
                 {/* Right Column: Editorial Illustration Showcase */}
-                <div className="lg:col-span-5 relative bg-indigo-950 min-h-[280px] flex flex-col justify-end overflow-hidden">
+                <div className="lg:col-span-5 relative bg-indigo-950 min-h-[210px] sm:min-h-[280px] flex flex-col justify-end overflow-hidden">
                   <img
                     src={HERO_ILLUSTRATION}
                     alt="Ilustración editorial de un estudio de lectura con esquemas geométricos y botánicos emergiendo de un libro abierto"
@@ -848,11 +817,11 @@ export default function App() {
                     className="w-full h-full object-cover opacity-90"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-indigo-950/90 via-indigo-950/25 to-transparent" />
-                  <div className="relative p-6 sm:p-8 text-white space-y-2">
+                  <div className="relative p-4 sm:p-8 text-white space-y-1.5 sm:space-y-2">
                     <div className="text-xs text-amber-300 font-medium">
-                      Cobertura Exhaustiva del 90% de la Obra
+                      Cobertura Exhaustiva del 100% de la Obra
                     </div>
-                    <p className="text-sm text-stone-100 leading-relaxed">
+                    <p className="text-xs sm:text-sm text-stone-100 leading-relaxed">
                       Cada capítulo se desglosa en tesis central, desarrollo argumental completo, conceptos definidos, casos reales y preguntas de aplicación.
                     </p>
                   </div>
@@ -860,7 +829,7 @@ export default function App() {
               </section>
 
               {/* Visual Progress Bar Panel in 'Mapa y Resumen' (Ready State) */}
-              <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-7 space-y-4">
+              <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-7 space-y-4">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
@@ -876,9 +845,9 @@ export default function App() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4">
-                    <div className="text-right">
-                      <span className="text-2xl font-bold font-mono tabular-nums text-indigo-950">
+                  <div className="flex items-center justify-between sm:justify-end gap-3 pt-1 sm:pt-0">
+                    <div className="sm:text-right">
+                      <span className="text-xl sm:text-2xl font-bold font-mono tabular-nums text-indigo-950">
                         0%
                       </span>
                       <span className="block text-xs text-stone-500">
@@ -890,7 +859,7 @@ export default function App() {
                       onClick={() => handleNavigateTab('explorer')}
                       className="px-3.5 py-2 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                     >
-                      <span>Ver Ruta de Capítulos</span>
+                      <span>Ver Capítulos</span>
                       <ArrowRight className="w-3.5 h-3.5 text-amber-400" />
                     </button>
                   </div>
@@ -900,34 +869,34 @@ export default function App() {
                   <div className="h-full bg-amber-600 rounded-full w-0 transition-all duration-300" />
                 </div>
 
-                <p className="text-xs text-stone-600">
+                <p className="text-xs text-stone-600 leading-relaxed">
                   Al subir cualquier libro, esta barra registrará automáticamente cada capítulo que explores o marques como completado para mostrar tu porcentaje de avance sobre el 100% de la obra.
                 </p>
               </section>
 
               {/* Interactive 3-Stage Cards with Direct Section Navigation */}
-              <section className="space-y-6">
-                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-2">
+              <section className="space-y-4 sm:space-y-6">
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-1.5">
                   <div>
                     <div className="text-xs font-medium text-amber-800 mb-1">
                       Navegación por las Secciones de Estudio
                     </div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-indigo-950">
+                    <h2 className="text-lg sm:text-2xl font-bold text-indigo-950">
                       Explora las herramientas de LecturaViva
                     </h2>
                   </div>
                   <span className="text-xs text-stone-500">
-                    Haz clic en cualquier tarjeta para navegar a su sección
+                    Toca cualquier tarjeta para abrir su sección
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
                   {/* Stage 1 Card -> Ruta de Capítulos */}
                   <div
                     onClick={() => handleNavigateTab('explorer')}
                     className="group bg-white border border-stone-200/90 hover:border-amber-600 rounded-2xl overflow-hidden flex flex-col transition-all cursor-pointer"
                   >
-                    <div className="aspect-4/3 bg-stone-100 overflow-hidden border-b border-stone-200/80">
+                    <div className="aspect-16/10 sm:aspect-4/3 bg-stone-100 overflow-hidden border-b border-stone-200/80">
                       <img
                         src={COMPASS_ILLUSTRATION}
                         alt="Brújula literaria y mapa de ruta por capítulos"
@@ -935,10 +904,10 @@ export default function App() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                       />
                     </div>
-                    <div className="p-6 space-y-2.5 flex-1 flex flex-col justify-between">
+                    <div className="p-4 sm:p-6 space-y-2.5 flex-1 flex flex-col justify-between">
                       <div className="space-y-2">
                         <div className="text-xs font-mono font-semibold text-amber-700">
-                          01 · Capítulos al 90% de Detalle
+                          01 · Capítulos al 100% de Detalle
                         </div>
                         <h3 className="text-base font-bold text-indigo-950 group-hover:text-amber-800 transition-colors">
                           Ruta Profunda de Capítulos
@@ -1023,34 +992,34 @@ export default function App() {
           )}
 
           {activeTab === 'explorer' && (
-            <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-10 space-y-8">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-200/80">
+            <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-10 space-y-6 sm:space-y-8">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 sm:pb-6 border-b border-stone-200/80">
                 <div className="space-y-1">
                   <div className="text-xs font-medium text-amber-800">
-                    Ruta de Capítulos · Cobertura del 90% del Contenido
+                    Ruta de Capítulos · Cobertura del 100% del Contenido
                   </div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-indigo-950">
+                  <h1 className="text-xl sm:text-3xl font-bold text-indigo-950">
                     Desglose Profundo Capítulo por Capítulo
                   </h1>
                   <p className="text-sm text-stone-600 max-w-2xl">
                     Cuando subas tu libro en PDF o texto, aquí podrás navegar por cada uno de sus capítulos con las 6 capas de profundidad editorial.
                   </p>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto shrink-0">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                    className="flex-1 sm:flex-none justify-center px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap"
                   >
                     <FileUp className="w-4 h-4 text-amber-400" />
-                    <span>Seleccionar Libro (PDF / TXT)</span>
+                    <span>Seleccionar Libro</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => handleNavigateTab('summary')}
-                    className="px-3.5 py-2.5 bg-[#FAF7F2] hover:bg-stone-200/70 text-stone-700 text-xs font-medium rounded-xl border border-stone-200/90 transition-colors cursor-pointer whitespace-nowrap"
+                    className="flex-1 sm:flex-none justify-center px-3.5 py-2.5 bg-[#FAF7F2] hover:bg-stone-200/70 text-stone-700 text-xs font-medium rounded-xl border border-stone-200/90 transition-colors cursor-pointer whitespace-nowrap"
                   >
-                    Volver a Mapa y Resumen
+                    Volver al Inicio
                   </button>
                 </div>
               </div>
@@ -1104,41 +1073,41 @@ export default function App() {
           )}
 
           {activeTab === 'quiz' && (
-            <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-10 space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-200/80">
+            <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-10 space-y-5 sm:space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 sm:pb-6 border-b border-stone-200/80">
                 <div className="space-y-1">
                   <div className="text-xs font-medium text-amber-800">
                     Comprobación de Lectura
                   </div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-indigo-950">
+                  <h1 className="text-xl sm:text-3xl font-bold text-indigo-950">
                     Evaluación Interactiva del Libro
                   </h1>
                   <p className="text-sm text-stone-600 max-w-2xl">
                     Configura la dificultad, el formato y la cantidad de preguntas. Sube un libro para generar tu cuestionario personalizado al instante.
                   </p>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto shrink-0">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                    className="flex-1 sm:flex-none justify-center px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap"
                   >
                     <FileUp className="w-4 h-4 text-amber-400" />
-                    <span>Subir Libro para Evaluar</span>
+                    <span>Subir Libro</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => handleNavigateTab('summary')}
-                    className="px-3.5 py-2.5 bg-[#FAF7F2] hover:bg-stone-200/70 text-stone-700 text-xs font-medium rounded-xl border border-stone-200/90 transition-colors cursor-pointer whitespace-nowrap"
+                    className="flex-1 sm:flex-none justify-center px-3.5 py-2.5 bg-[#FAF7F2] hover:bg-stone-200/70 text-stone-700 text-xs font-medium rounded-xl border border-stone-200/90 transition-colors cursor-pointer whitespace-nowrap"
                   >
                     Volver al Inicio
                   </button>
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-4 p-5 rounded-xl bg-[#FAF7F2] border border-stone-200/80">
-                <div className="flex items-center gap-2 text-xs">
-                  <span className="text-stone-600 font-semibold">Dificultad preseleccionada:</span>
+              <div className="flex flex-wrap items-center gap-3 sm:gap-4 p-4 sm:p-5 rounded-xl bg-[#FAF7F2] border border-stone-200/80">
+                <div className="flex flex-wrap items-center gap-2 text-xs">
+                  <span className="text-stone-600 font-semibold">Dificultad:</span>
                   <div className="flex items-center gap-1 p-1 bg-white border border-stone-200/80 rounded-lg">
                     {(['Básico', 'Intermedio', 'Avanzado'] as const).map((level) => (
                       <button
@@ -1189,32 +1158,32 @@ export default function App() {
           )}
 
           {activeTab === 'chat' && (
-            <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-10 space-y-6">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-stone-200/80">
+            <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-10 space-y-5 sm:space-y-6">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pb-5 sm:pb-6 border-b border-stone-200/80">
                 <div className="space-y-1">
                   <div className="text-xs font-medium text-amber-800">
                     Asistente Contextual fundamentado en el Libro
                   </div>
-                  <h1 className="text-2xl sm:text-3xl font-bold text-indigo-950">
+                  <h1 className="text-xl sm:text-3xl font-bold text-indigo-950">
                     Dialogar con el Libro
                   </h1>
                   <p className="text-sm text-stone-600 max-w-2xl">
                     Realiza preguntas abiertas sobre cualquier capítulo, concepto o caso de estudio. El asistente responde citando pasajes de la obra cargada.
                   </p>
                 </div>
-                <div className="flex items-center gap-3 shrink-0">
+                <div className="flex flex-wrap items-center gap-2.5 w-full md:w-auto shrink-0">
                   <button
                     type="button"
                     onClick={() => fileInputRef.current?.click()}
-                    className="px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap"
+                    className="flex-1 sm:flex-none justify-center px-4 py-2.5 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 cursor-pointer whitespace-nowrap"
                   >
                     <FileUp className="w-4 h-4 text-amber-400" />
-                    <span>Subir Libro para Dialogar</span>
+                    <span>Subir Libro</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => handleNavigateTab('summary')}
-                    className="px-3.5 py-2.5 bg-[#FAF7F2] hover:bg-stone-200/70 text-stone-700 text-xs font-medium rounded-xl border border-stone-200/90 transition-colors cursor-pointer whitespace-nowrap"
+                    className="flex-1 sm:flex-none justify-center px-3.5 py-2.5 bg-[#FAF7F2] hover:bg-stone-200/70 text-stone-700 text-xs font-medium rounded-xl border border-stone-200/90 transition-colors cursor-pointer whitespace-nowrap"
                   >
                     Volver al Inicio
                   </button>
@@ -1243,13 +1212,45 @@ export default function App() {
            ===================================================================== */
         <main
           id="workspace"
-          className="max-w-[1400px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 lg:grid-cols-12 gap-8 flex-1"
+          className="max-w-[1400px] w-full mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-8 flex-1"
         >
-          {/* LEFT COLUMN: Active Book Card, Visual Stats & Key Principles */}
-          <aside className="lg:col-span-4 space-y-6 no-print">
+          {/* Compact Mobile Active Book Strip so phone users immediately see active tab content first */}
+          <div className="lg:hidden bg-white border border-stone-200/90 rounded-2xl p-3.5 flex items-center justify-between gap-3 no-print">
+            <div className="min-w-0 flex-1">
+              <div className="text-[11px] font-medium text-amber-800 flex items-center gap-1.5">
+                <span>Obra activa</span>
+                <span aria-hidden="true">·</span>
+                <span className="font-mono font-bold tabular-nums">{chapterProgressPercent}% avance</span>
+              </div>
+              <div className="text-sm font-bold text-indigo-950 truncate">
+                {analysis?.title || fileName}
+              </div>
+            </div>
+            <div className="flex items-center gap-1.5 shrink-0">
+              <button
+                type="button"
+                onClick={() => fileInputRef.current?.click()}
+                aria-label="Cambiar libro"
+                className="p-2 rounded-lg bg-indigo-950 text-amber-400 hover:bg-indigo-900 cursor-pointer"
+              >
+                <FileUp className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={handleClearBook}
+                aria-label="Cerrar libro"
+                className="p-2 rounded-lg bg-rose-50 text-rose-700 border border-rose-200 hover:bg-rose-100 cursor-pointer"
+              >
+                <Trash2 className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+
+          {/* LEFT COLUMN (Desktop) / BOTTOM INFO (Mobile): Active Book Card, Visual Stats & Key Principles */}
+          <aside className="order-2 lg:order-1 lg:col-span-4 space-y-4 sm:space-y-6 no-print min-w-0">
             {/* Active Book Card with Visual Header Banner */}
             <section className="bg-white border border-stone-200/90 rounded-2xl overflow-hidden">
-              <div className="h-28 relative bg-indigo-950 overflow-hidden">
+              <div className="h-24 sm:h-28 relative bg-indigo-950 overflow-hidden">
                 <img
                   src={HERO_ILLUSTRATION}
                   alt="Portada ilustrada del estudio de lectura"
@@ -1257,7 +1258,7 @@ export default function App() {
                   className="w-full h-full object-cover opacity-75"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-indigo-950 via-indigo-950/40 to-transparent" />
-                <div className="absolute bottom-3 left-5 right-5 flex items-center justify-between text-xs text-amber-300 font-medium">
+                <div className="absolute bottom-3 left-4 right-4 sm:left-5 sm:right-5 flex items-center justify-between text-xs text-amber-300 font-medium">
                   <span>Obra en Estudio</span>
                   {pageCount > 0 && (
                     <span className="font-mono tabular-nums">
@@ -1267,7 +1268,7 @@ export default function App() {
                 </div>
               </div>
 
-              <div className="p-6 space-y-4">
+              <div className="p-4 sm:p-6 space-y-4">
                 <div>
                   <h2 className="text-lg font-bold text-indigo-950 leading-snug">
                     {analysis?.title || fileName}
@@ -1422,18 +1423,18 @@ export default function App() {
             )}
           </aside>
 
-          {/* RIGHT COLUMN: Main Interactive Book Views */}
-          <section className="lg:col-span-8 space-y-6">
+          {/* RIGHT COLUMN (Desktop) / TOP CONTENT (Mobile): Main Interactive Book Views */}
+          <section className="order-1 lg:order-2 lg:col-span-8 space-y-4 sm:space-y-6 min-w-0">
             {/* =================================================================
                 VIEW 1: MAPA CONCEPTUAL, BARRA DE PROGRESO Y RESUMEN DEL LIBRO
                 ================================================================= */}
             {activeTab === 'summary' && analysis && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* =============================================================
                     VISUAL PROGRESS BAR OF EXPLORED / COMPLETED CHAPTERS
                     ============================================================= */}
                 {chaptersList.length > 0 && (
-                  <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-7 space-y-4">
+                  <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-7 space-y-4">
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center shrink-0">
@@ -1449,9 +1450,9 @@ export default function App() {
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-3">
-                        <div className="text-right">
-                          <span className="text-2xl font-bold font-mono tabular-nums text-indigo-950">
+                      <div className="flex items-center justify-between sm:justify-end gap-3 pt-1 sm:pt-0">
+                        <div className="sm:text-right">
+                          <span className="text-xl sm:text-2xl font-bold font-mono tabular-nums text-indigo-950">
                             {chapterProgressPercent}%
                           </span>
                           <span className="block text-xs text-stone-500">
@@ -1502,7 +1503,7 @@ export default function App() {
                               type="button"
                               onClick={() => handleSelectAndExploreChapter(idx, true)}
                               title={`Capítulo ${cap.n}: ${cap.titulo}`}
-                              className={`px-2.5 py-1 rounded-lg text-xs font-mono font-medium transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                              className={`px-2.5 py-1.5 rounded-lg text-xs font-mono font-medium transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                                 isDone
                                   ? 'bg-emerald-50 border border-emerald-300 text-emerald-900'
                                   : 'bg-[#FAF7F2] border border-stone-200 text-stone-600 hover:border-amber-500 hover:text-indigo-950'
@@ -1535,9 +1536,9 @@ export default function App() {
                 )}
 
                 {/* Book Synopsis Card */}
-                <article className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-8">
-                  <div className="flex flex-wrap items-center gap-2 text-xs text-amber-800 font-medium mb-3">
-                    <span>Síntesis Ejecutiva Integral (90% del Contenido)</span>
+                <article className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-8">
+                  <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-xs text-amber-800 font-medium mb-2.5 sm:mb-3">
+                    <span>Síntesis Ejecutiva Integral (100% del Contenido)</span>
                     {analysis.authorOrSource && (
                       <>
                         <span aria-hidden="true">·</span>
@@ -1548,7 +1549,7 @@ export default function App() {
                     <span className="tabular-nums">{chaptersList.length} capítulos profundos</span>
                   </div>
 
-                  <h1 className="text-2xl sm:text-3xl font-bold text-indigo-950 tracking-tight mb-4">
+                  <h1 className="text-xl sm:text-3xl font-bold text-indigo-950 tracking-tight mb-3.5 sm:mb-4">
                     {analysis.title}
                   </h1>
 
@@ -1559,23 +1560,23 @@ export default function App() {
                   </div>
 
                   {/* Quick Action Bar */}
-                  <div className="mt-6 pt-5 border-t border-stone-200/80 flex flex-wrap items-center justify-between gap-4 no-print">
+                  <div className="mt-5 sm:mt-6 pt-4 sm:pt-5 border-t border-stone-200/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4 no-print">
                     <div className="text-xs text-stone-500">
                       Explora el estudio exhaustivo de cada capítulo, realiza el test o conversa con el libro.
                     </div>
-                    <div className="flex items-center gap-2.5">
+                    <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                       <button
                         type="button"
                         onClick={() => handleSelectAndExploreChapter(activeChapterIdx, true)}
-                        className="px-3.5 py-2 text-xs font-semibold text-indigo-950 bg-amber-100/80 hover:bg-amber-200/80 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                        className="flex-1 sm:flex-none justify-center px-3 py-2 text-xs font-semibold text-indigo-950 bg-amber-100/80 hover:bg-amber-200/80 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                       >
                         <Compass className="w-3.5 h-3.5 text-amber-800" />
-                        <span>Estudiar Capítulos ({chaptersList.length})</span>
+                        <span>Capítulos ({chaptersList.length})</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => handleNavigateTab('quiz')}
-                        className="px-3.5 py-2 text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                        className="flex-1 sm:flex-none justify-center px-3 py-2 text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                       >
                         <HelpCircle className="w-3.5 h-3.5" />
                         <span>Evaluación ({questions.length})</span>
@@ -1583,7 +1584,7 @@ export default function App() {
                       <button
                         type="button"
                         onClick={() => handleNavigateTab('chat')}
-                        className="px-3.5 py-2 text-xs font-semibold text-white bg-indigo-950 hover:bg-indigo-900 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                        className="w-full sm:w-auto justify-center px-3.5 py-2 text-xs font-semibold text-white bg-indigo-950 hover:bg-indigo-900 rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                       >
                         <MessageSquare className="w-3.5 h-3.5 text-amber-400" />
                         <span>Dialogar con el Libro</span>
@@ -1595,26 +1596,26 @@ export default function App() {
                 {/* =============================================================
                     VISUAL CONCEPTUAL MAP / ESQUEMA DE ARQUITECTURA DE LA OBRA
                     ============================================================= */}
-                <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-8 space-y-6">
+                <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-8 space-y-5 sm:space-y-6">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
                     <div>
                       <div className="text-xs font-medium text-amber-800 mb-0.5">
                         Esquema Estructural de la Obra
                       </div>
-                      <h2 className="text-lg font-bold text-indigo-950">
+                      <h2 className="text-base sm:text-lg font-bold text-indigo-950">
                         Mapa Conceptual y Distribución de Ejes Temáticos
                       </h2>
                     </div>
                     <span className="text-xs text-stone-500">
-                      Haz clic en cualquier eje o capítulo para inspeccionarlo
+                      Toca cualquier eje o capítulo para inspeccionarlo
                     </span>
                   </div>
 
                   {/* Visual Tree Schema: Central Thesis -> Thematic Axes -> Chapters Flow */}
-                  <div className="p-5 sm:p-6 rounded-xl bg-[#FAF7F2] border border-stone-200/80 space-y-6">
+                  <div className="p-3.5 sm:p-6 rounded-xl bg-[#FAF7F2] border border-stone-200/80 space-y-5 sm:space-y-6">
                     {/* Level 1: Core Node */}
                     <div className="flex flex-col items-center text-center">
-                      <div className="px-4 py-2 rounded-xl bg-indigo-950 text-white text-xs sm:text-sm font-bold max-w-xl">
+                      <div className="px-3.5 py-2 rounded-xl bg-indigo-950 text-white text-xs sm:text-sm font-bold max-w-full sm:max-w-xl">
                         Núcleo de la Obra: {analysis.title}
                       </div>
                       {/* Connecting SVG Stem */}
@@ -1624,7 +1625,7 @@ export default function App() {
                     </div>
 
                     {/* Level 2: Thematic Distribution Bars */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 sm:gap-3">
                       {uniqueCategories.map((cat, idx) => {
                         const count = keyPointsList.filter((kp) => kp.category === cat).length;
                         const pct = Math.max(20, Math.round((count / Math.max(1, keyPointsList.length)) * 100));
@@ -1644,7 +1645,7 @@ export default function App() {
                           >
                             <div className="flex items-center justify-between gap-2 text-xs font-semibold mb-1.5">
                               <span className={palette.text}>{cat}</span>
-                              <span className="font-mono tabular-nums text-stone-600">
+                              <span className="font-mono tabular-nums text-stone-600 shrink-0">
                                 {count} {count === 1 ? 'idea' : 'ideas'}
                               </span>
                             </div>
@@ -1662,11 +1663,11 @@ export default function App() {
                     {/* Level 3: Visual Chapter Flow Chain */}
                     {chaptersList.length > 0 && (
                       <div className="pt-4 border-t border-stone-200/80 space-y-3">
-                        <div className="text-xs font-semibold text-stone-600 flex items-center justify-between">
+                        <div className="text-xs font-semibold text-stone-600 flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                           <span>Secuencia Narrativa de Capítulos</span>
-                          <span>Haz clic en un nodo para estudiar el capítulo completo</span>
+                          <span className="font-normal text-stone-500">Desliza y toca un nodo para estudiar el capítulo</span>
                         </div>
-                        <div className="flex items-center gap-2 overflow-x-auto pb-2">
+                        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar">
                           {chaptersList.map((cap, idx) => {
                             const isExplored = Boolean(exploredChapters[idx]);
                             return (
@@ -1674,7 +1675,7 @@ export default function App() {
                                 <button
                                   type="button"
                                   onClick={() => handleSelectAndExploreChapter(idx, true)}
-                                  className={`group px-3.5 py-2.5 rounded-xl border text-left shrink-0 max-w-[200px] transition-colors cursor-pointer ${
+                                  className={`group px-3.5 py-2.5 rounded-xl border text-left shrink-0 max-w-[175px] sm:max-w-[200px] transition-colors cursor-pointer ${
                                     isExplored
                                       ? 'bg-emerald-50/70 border-emerald-300 hover:border-emerald-500'
                                       : 'bg-white border-stone-200/90 hover:border-amber-600'
@@ -1705,7 +1706,7 @@ export default function App() {
                 </section>
 
                 {/* Key Ideas with Interactive Category Filter */}
-                <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-8">
+                <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-8">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                       <h2 className="text-lg font-bold text-indigo-950">
@@ -1795,36 +1796,36 @@ export default function App() {
             )}
 
             {/* =================================================================
-                VIEW 2: RUTA PROFUNDA DE CAPÍTULOS (90% DEL CONTENIDO) Y CITAS
+                VIEW 2: RUTA PROFUNDA DE CAPÍTULOS (100% DEL CONTENIDO) Y CITAS
                 ================================================================= */}
             {activeTab === 'explorer' && analysis && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Chapter Selector & Deep Content Section */}
-                <section className="bg-white border border-stone-200/90 rounded-2xl p-6 sm:p-8">
-                  <div className="flex flex-wrap items-center justify-between gap-3 mb-2">
-                    <div>
+                <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-8">
+                  <div className="flex flex-wrap items-center justify-between gap-2.5 mb-2">
+                    <div className="min-w-0">
                       <div className="text-xs font-medium text-amber-800 mb-0.5">
-                        Estudio Exhaustivo Capítulo por Capítulo (90% de la Obra)
+                        Estudio Exhaustivo Capítulo por Capítulo (100% de la Obra)
                       </div>
-                      <h2 className="text-xl font-bold text-indigo-950">
+                      <h2 className="text-lg sm:text-xl font-bold text-indigo-950">
                         Ruta de Capítulos — {analysis.title}
                       </h2>
                     </div>
                     <div className="text-xs font-mono tabular-nums text-stone-600 bg-[#FAF7F2] px-3 py-1.5 rounded-lg border border-stone-200/80">
-                      Avance: {exploredChaptersCount} / {totalChaptersCount} capítulos ({chapterProgressPercent}%)
+                      Avance: {exploredChaptersCount} / {totalChaptersCount} ({chapterProgressPercent}%)
                     </div>
                   </div>
-                  <p className="text-sm text-stone-600 mb-6">
-                    Selecciona cada capítulo para estudiar su desarrollo extenso, conceptos definidos, historias reales, citas y preguntas de aplicación.
+                  <p className="text-xs sm:text-sm text-stone-600 mb-4 sm:mb-6">
+                    Selecciona cada capítulo para estudiar su desarrollo extenso, conceptos definidos, historias reales, adaptación al mundo actual y preguntas.
                   </p>
 
                   {chaptersList.length > 0 && activeChapter ? (
                     <>
-                      {/* Interactive Chapter Roadmap Nodes with Checkmarks */}
+                      {/* Interactive Chapter Roadmap Nodes (swipeable on mobile, wrapped on desktop) */}
                       <div
                         role="tablist"
                         aria-label="Capítulos del libro"
-                        className="flex flex-wrap items-center gap-2 mb-6"
+                        className="flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap mb-4 sm:mb-6 no-scrollbar"
                       >
                         {chaptersList.map((cap, idx) => {
                           const isSelected = idx === activeChapterIdx;
@@ -1836,7 +1837,7 @@ export default function App() {
                               role="tab"
                               aria-selected={isSelected}
                               onClick={() => handleSelectAndExploreChapter(idx, false)}
-                              className={`py-2 px-3.5 rounded-xl text-xs font-mono font-semibold transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                              className={`py-2 px-3.5 rounded-xl text-xs font-mono font-semibold transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap shrink-0 ${
                                 isSelected
                                   ? 'bg-indigo-950 text-amber-300 shadow-xs'
                                   : isExplored
@@ -1858,11 +1859,11 @@ export default function App() {
                       </div>
 
                       {/* Selected Chapter Deep Analysis Container */}
-                      <div className="border border-stone-200/90 rounded-2xl p-6 sm:p-8 bg-[#FAF7F2] space-y-6">
+                      <div className="border border-stone-200/90 rounded-2xl p-3.5 sm:p-8 bg-[#FAF7F2] space-y-4 sm:space-y-6">
                         {/* Chapter Header & Controls */}
-                        <div className="flex flex-wrap items-start justify-between gap-4 pb-5 border-b border-stone-200/80">
+                        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3.5 pb-4 sm:pb-5 border-b border-stone-200/80">
                           <div className="space-y-1 max-w-xl">
-                            <div className="flex items-center gap-2 text-xs text-amber-800 font-mono font-semibold">
+                            <div className="flex flex-wrap items-center gap-1.5 text-xs text-amber-800 font-mono font-semibold">
                               <span>
                                 Capítulo {activeChapter.n} de {chaptersList.length}
                               </span>
@@ -1873,21 +1874,21 @@ export default function App() {
                                 </>
                               )}
                             </div>
-                            <h3 className="text-xl sm:text-2xl font-bold text-indigo-950">
+                            <h3 className="text-lg sm:text-2xl font-bold text-indigo-950">
                               {activeChapter.titulo}
                             </h3>
                             {activeChapter.subtitulo && (
-                              <p className="text-sm text-stone-600 font-medium">
+                              <p className="text-xs sm:text-sm text-stone-600 font-medium">
                                 {activeChapter.subtitulo}
                               </p>
                             )}
                           </div>
 
-                          <div className="flex flex-wrap items-center gap-2 shrink-0">
+                          <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto shrink-0">
                             <button
                               type="button"
                               onClick={() => handleToggleChapterCompleted(activeChapterIdx)}
-                              className={`px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
+                              className={`flex-1 sm:flex-none justify-center px-3 py-2 text-xs font-semibold rounded-lg border transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap ${
                                 exploredChapters[activeChapterIdx]
                                   ? 'bg-emerald-600 border-emerald-600 text-white'
                                   : 'bg-white border-stone-300 text-stone-700 hover:border-emerald-600'
@@ -1896,8 +1897,8 @@ export default function App() {
                               <CheckCircle2 className="w-3.5 h-3.5" />
                               <span>
                                 {exploredChapters[activeChapterIdx]
-                                  ? 'Capítulo Completado'
-                                  : 'Marcar como completado'}
+                                  ? 'Completado'
+                                  : 'Completar'}
                               </span>
                             </button>
 
@@ -1910,7 +1911,7 @@ export default function App() {
                                   false
                                 )
                               }
-                              className="px-3 py-1.5 text-xs font-medium bg-white border border-stone-200 rounded-lg disabled:opacity-40 hover:bg-stone-100 cursor-pointer"
+                              className="px-3 py-2 text-xs font-medium bg-white border border-stone-200 rounded-lg disabled:opacity-40 hover:bg-stone-100 cursor-pointer"
                             >
                               Anterior
                             </button>
@@ -1923,7 +1924,7 @@ export default function App() {
                                   false
                                 )
                               }
-                              className="px-3 py-1.5 text-xs font-medium bg-indigo-950 text-white rounded-lg disabled:opacity-40 hover:bg-indigo-900 cursor-pointer"
+                              className="px-3 py-2 text-xs font-medium bg-indigo-950 text-white rounded-lg disabled:opacity-40 hover:bg-indigo-900 cursor-pointer"
                             >
                               Siguiente
                             </button>
@@ -2052,13 +2053,13 @@ export default function App() {
                             </div>
                           </div>
 
-                          <div className="p-5 sm:p-6 space-y-5 bg-[#FAF7F2]/60">
+                          <div className="p-4 sm:p-6 space-y-4 sm:space-y-5 bg-[#FAF7F2]/60">
                             {/* Interactive Domain Selector Pills */}
                             <div className="space-y-2">
                               <label className="block text-xs font-semibold text-indigo-950">
                                 1. Elige el ámbito del mundo actual para adaptar este capítulo:
                               </label>
-                              <div className="flex flex-wrap items-center gap-2">
+                              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                                 {REAL_WORLD_DOMAINS.map((domain) => {
                                   const currentAdaptation =
                                     customChapterAdaptations[activeChapterIdx] ||
@@ -2070,7 +2071,7 @@ export default function App() {
                                       type="button"
                                       disabled={isAdaptingChapter}
                                       onClick={() => handleAdaptChapterToRealWorld(domain)}
-                                      className={`px-3 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer whitespace-nowrap ${
+                                      className={`px-3 py-1.5 rounded-xl text-xs font-medium text-left transition-colors cursor-pointer ${
                                         isSelected
                                           ? 'bg-indigo-950 text-amber-300 font-semibold'
                                           : 'bg-white border border-stone-200/90 text-stone-700 hover:border-amber-600 hover:text-indigo-950'
@@ -2091,8 +2092,8 @@ export default function App() {
                                 value={customAdaptationContext}
                                 onChange={(e) => setCustomAdaptationContext(e.target.value)}
                                 disabled={isAdaptingChapter}
-                                placeholder="Opcional: Describe tu empresa, equipo, industria o reto real (ej. 'Lidero un equipo comercial de 12 personas en una empresa tecnológica')..."
-                                className="flex-1 px-4 py-2.5 text-xs sm:text-sm bg-white border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600"
+                                placeholder="Opcional: Describe tu empresa, equipo o reto real..."
+                                className="flex-1 px-3.5 py-2.5 text-base sm:text-sm bg-white border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600"
                               />
                               <button
                                 type="button"
@@ -2122,7 +2123,7 @@ export default function App() {
 
                               if (!activeAdaptation) {
                                 return (
-                                  <div className="p-5 rounded-xl bg-white border border-stone-200/90 text-center space-y-3">
+                                  <div className="p-4 sm:p-5 rounded-xl bg-white border border-stone-200/90 text-center space-y-3">
                                     <p className="text-xs sm:text-sm text-stone-600">
                                       Haz clic en cualquiera de los ámbitos superiores o en <strong>Adaptar a Caso Real</strong> para generar el caso práctico de negocios, liderazgo o empresa de este capítulo.
                                     </p>
@@ -2131,8 +2132,8 @@ export default function App() {
                               }
 
                               return (
-                                <div className="bg-white border border-stone-200/90 rounded-xl p-5 sm:p-6 space-y-5">
-                                  <div className="flex flex-wrap items-center justify-between gap-2 pb-4 border-b border-stone-200/80">
+                                <div className="bg-white border border-stone-200/90 rounded-xl p-4 sm:p-6 space-y-4 sm:space-y-5">
+                                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-4 border-b border-stone-200/80">
                                     <div>
                                       <div className="text-xs font-mono font-semibold text-amber-800">
                                         Ámbito Aplicado: {activeAdaptation.ambito}
@@ -2149,7 +2150,7 @@ export default function App() {
                                           `Quiero profundizar en la adaptación del Capítulo ${activeChapter.n} ("${activeChapter.titulo}") al ámbito de ${activeAdaptation.ambito} (${activeAdaptation.tituloCaso}). ¿Cómo puedo implementar este plan paso a paso en mi organización?`
                                         );
                                       }}
-                                      className="px-3 py-1.5 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
+                                      className="self-start sm:self-auto px-3 py-2 bg-indigo-950 hover:bg-indigo-900 text-white text-xs font-semibold rounded-lg transition-colors flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
                                     >
                                       <MessageSquare className="w-3.5 h-3.5 text-amber-400" />
                                       <span>Simular Caso en el Chat</span>
@@ -2157,8 +2158,8 @@ export default function App() {
                                   </div>
 
                                   {/* Scenario & Book Parallel Grid */}
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                    <div className="p-4 rounded-xl bg-[#FAF7F2] border border-stone-200/80 space-y-1.5">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4">
+                                    <div className="p-3.5 sm:p-4 rounded-xl bg-[#FAF7F2] border border-stone-200/80 space-y-1.5">
                                       <div className="text-xs font-bold text-indigo-950">
                                         Escenario en el Mundo Actual / Empresa
                                       </div>
@@ -2167,7 +2168,7 @@ export default function App() {
                                       </p>
                                     </div>
 
-                                    <div className="p-4 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-1.5">
+                                    <div className="p-3.5 sm:p-4 rounded-xl bg-amber-50/70 border border-amber-200/80 space-y-1.5">
                                       <div className="text-xs font-bold text-amber-950">
                                         Paralelo Estratégico con el Capítulo {activeChapter.n}
                                       </div>
@@ -2188,9 +2189,9 @@ export default function App() {
                                           {activeAdaptation.planDeAccion.map((paso, stepIdx) => (
                                             <div
                                               key={stepIdx}
-                                              className="p-3.5 rounded-xl bg-[#FAF7F2] border border-stone-200/80 flex items-start gap-2.5 text-xs sm:text-sm text-stone-700"
+                                              className="p-3 sm:p-3.5 rounded-xl bg-[#FAF7F2] border border-stone-200/80 flex items-start gap-2.5 text-xs sm:text-sm text-stone-700"
                                             >
-                                              <span className="font-mono text-xs font-bold text-amber-700 tabular-nums mt-0.5">
+                                              <span className="font-mono text-xs font-bold text-amber-700 tabular-nums mt-0.5 shrink-0">
                                                 Paso 0{stepIdx + 1}.
                                               </span>
                                               <span className="leading-relaxed">{paso}</span>
@@ -2201,7 +2202,7 @@ export default function App() {
                                     )}
 
                                   {/* Pitfall to Avoid & Success KPI */}
-                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 sm:gap-4 pt-1">
                                     {activeAdaptation.errorComunEvitar && (
                                       <div className="p-3.5 rounded-xl bg-rose-50/80 border border-rose-200 text-xs space-y-1">
                                         <div className="font-bold text-rose-950 flex items-center gap-1.5">
@@ -2235,14 +2236,14 @@ export default function App() {
                         {/* 7. Reflection & Practical Application Questions */}
                         {Array.isArray(activeChapter.preguntasReflexion) &&
                           activeChapter.preguntasReflexion.length > 0 && (
-                            <div className="bg-amber-50/60 border border-amber-200/80 rounded-xl p-5 space-y-3">
-                              <div className="flex items-center justify-between gap-2">
+                            <div className="bg-amber-50/60 border border-amber-200/80 rounded-xl p-4 sm:p-5 space-y-3">
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
                                 <div className="flex items-center gap-2 text-xs font-semibold text-amber-950">
-                                  <Sparkles className="w-4 h-4 text-amber-700" />
+                                  <Sparkles className="w-4 h-4 text-amber-700 shrink-0" />
                                   <span>Preguntas de Aplicación y Reflexión de este Capítulo</span>
                                 </div>
                                 <span className="text-xs text-stone-500">
-                                  Haz clic para debatirlas con el asistente
+                                  Toca para debatirlas con el asistente
                                 </span>
                               </div>
                               <div className="space-y-2">
@@ -2316,15 +2317,15 @@ export default function App() {
                 VIEW 3: EVALUACIÓN DE LECTURA CON MEDIDOR VISUAL
                 ================================================================= */}
             {activeTab === 'quiz' && (
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 {/* Quiz Configuration & Visual Mastery Gauge Header */}
-                <section className="bg-white border border-stone-200/90 rounded-2xl p-6">
-                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-5 border-b border-stone-200/80">
+                <section className="bg-white border border-stone-200/90 rounded-2xl p-4 sm:p-6">
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6 pb-4 sm:pb-5 border-b border-stone-200/80">
                     <div>
                       <div className="text-xs font-medium text-amber-800 mb-0.5">
                         Comprobación de Lectura
                       </div>
-                      <h2 className="text-xl font-bold text-indigo-950">
+                      <h2 className="text-lg sm:text-xl font-bold text-indigo-950">
                         Evaluación Interactiva del Libro
                       </h2>
                       <p className="text-xs text-stone-500 mt-0.5">
@@ -2333,31 +2334,33 @@ export default function App() {
                     </div>
 
                     {/* Visual Radial Mastery Ring & Score Counter */}
-                    <div className="flex items-center gap-4 shrink-0 bg-[#FAF7F2] border border-stone-200/80 rounded-xl px-4 py-3">
-                      <svg className="w-12 h-12 -rotate-90 shrink-0" viewBox="0 0 36 36">
-                        <circle
-                          cx="18"
-                          cy="18"
-                          r="15"
-                          fill="none"
-                          stroke="#e7e5e4"
-                          strokeWidth="3.5"
-                        />
-                        <circle
-                          cx="18"
-                          cy="18"
-                          r="15"
-                          fill="none"
-                          stroke="#d97706"
-                          strokeWidth="3.5"
-                          strokeDasharray={`${masteryPercent} 100`}
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                      <div>
-                        <div className="text-xs text-stone-500">Dominio Actual</div>
-                        <div className="text-base font-bold text-indigo-950 font-mono tabular-nums">
-                          {totalCorrect} / {totalQuestions} aciertos ({masteryPercent}%)
+                    <div className="flex flex-wrap items-center justify-between gap-3 w-full md:w-auto shrink-0 bg-[#FAF7F2] border border-stone-200/80 rounded-xl px-3.5 sm:px-4 py-3">
+                      <div className="flex items-center gap-3">
+                        <svg className="w-11 h-11 sm:w-12 sm:h-12 -rotate-90 shrink-0" viewBox="0 0 36 36">
+                          <circle
+                            cx="18"
+                            cy="18"
+                            r="15"
+                            fill="none"
+                            stroke="#e7e5e4"
+                            strokeWidth="3.5"
+                          />
+                          <circle
+                            cx="18"
+                            cy="18"
+                            r="15"
+                            fill="none"
+                            stroke="#d97706"
+                            strokeWidth="3.5"
+                            strokeDasharray={`${masteryPercent} 100`}
+                            strokeLinecap="round"
+                          />
+                        </svg>
+                        <div>
+                          <div className="text-xs text-stone-500">Dominio Actual</div>
+                          <div className="text-sm sm:text-base font-bold text-indigo-950 font-mono tabular-nums">
+                            {totalCorrect} / {totalQuestions} aciertos ({masteryPercent}%)
+                          </div>
                         </div>
                       </div>
                       {totalAnswered > 0 && (
@@ -2648,16 +2651,15 @@ export default function App() {
                 VIEW 4: DIALOGAR CON EL LIBRO (ASISTENTE)
                 ================================================================= */}
             {activeTab === 'chat' && analysis && (
-              <section className="bg-white border border-stone-200/90 rounded-2xl flex flex-col h-[680px]">
+              <section className="bg-white border border-stone-200/90 rounded-2xl flex flex-col h-[calc(100dvh-13rem)] min-h-[440px] sm:h-[680px]">
                 {/* Chat Header */}
-                <div className="p-5 border-b border-stone-200/80 flex items-center justify-between gap-4">
-                  <div>
-                    <h2 className="text-base font-bold text-indigo-950">
+                <div className="p-3.5 sm:p-5 border-b border-stone-200/80 flex items-center justify-between gap-3">
+                  <div className="min-w-0">
+                    <h2 className="text-sm sm:text-base font-bold text-indigo-950">
                       Dialogar con el Libro
                     </h2>
-                    <p className="text-xs text-stone-500 mt-0.5">
-                      Respuestas fundamentadas en las páginas de{' '}
-                      <span className="font-semibold text-stone-800">{analysis.title}</span>.
+                    <p className="text-xs text-stone-500 mt-0.5 truncate">
+                      Basado en <span className="font-semibold text-stone-800">{analysis.title}</span>
                     </p>
                   </div>
                   <button
@@ -2676,15 +2678,15 @@ export default function App() {
                         },
                       ])
                     }
-                    className="px-3 py-1.5 text-xs font-medium text-stone-600 hover:text-indigo-950 bg-[#FAF7F2] hover:bg-stone-200/70 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                    className="px-2.5 sm:px-3 py-1.5 text-xs font-medium text-stone-600 hover:text-indigo-950 bg-[#FAF7F2] hover:bg-stone-200/70 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                   >
-                    Limpiar Conversación
+                    Limpiar
                   </button>
                 </div>
 
                 {/* Suggested Contextual Questions */}
                 {suggestedQuestionsList.length > 0 && (
-                  <div className="px-5 py-3 bg-[#FAF7F2] border-b border-stone-200/80 flex items-center gap-2 overflow-x-auto">
+                  <div className="px-3.5 sm:px-5 py-2.5 sm:py-3 bg-[#FAF7F2] border-b border-stone-200/80 flex items-center gap-2 overflow-x-auto no-scrollbar">
                     <span className="text-xs font-medium text-amber-800 shrink-0">Sugerencias:</span>
                     {suggestedQuestionsList.map((sq, idx) => (
                       <button
@@ -2692,7 +2694,7 @@ export default function App() {
                         type="button"
                         disabled={isChatLoading}
                         onClick={() => handleSendChatQuestion(sq)}
-                        className="px-3 py-1 text-xs bg-white hover:bg-amber-50 text-stone-700 hover:text-indigo-950 border border-stone-200/90 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                        className="px-3 py-1.5 text-xs bg-white hover:bg-amber-50 text-stone-700 hover:text-indigo-950 border border-stone-200/90 rounded-lg transition-colors whitespace-nowrap shrink-0 cursor-pointer"
                       >
                         {sq}
                       </button>
@@ -2701,20 +2703,20 @@ export default function App() {
                 )}
 
                 {/* Chat Messages Viewport */}
-                <div className="flex-1 overflow-y-auto p-5 space-y-4">
+                <div className="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
                   {chatMessages.map((msg) => (
                     <div
                       key={msg.id}
                       className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
                     >
                       <div
-                        className={`max-w-[85%] rounded-2xl p-4 text-sm space-y-2 ${
+                        className={`max-w-[92%] sm:max-w-[85%] rounded-2xl p-3.5 sm:p-4 text-sm space-y-2 ${
                           msg.role === 'user'
                             ? 'bg-indigo-950 text-white'
                             : 'bg-[#FAF7F2] text-stone-800 border border-stone-200/90'
                         }`}
                       >
-                        <div className="flex items-center justify-between gap-4 text-xs opacity-75">
+                        <div className="flex flex-wrap items-center justify-between gap-2 text-[11px] sm:text-xs opacity-75">
                           <span className="font-semibold">
                             {msg.role === 'user' ? 'Tú' : 'Asistente del Libro'}
                           </span>
@@ -2725,7 +2727,7 @@ export default function App() {
                           )}
                         </div>
 
-                        <div className="leading-relaxed whitespace-pre-wrap">{msg.content}</div>
+                        <div className="leading-relaxed whitespace-pre-wrap break-words">{msg.content}</div>
 
                         {msg.citations && msg.citations.length > 0 && (
                           <div className="pt-2 mt-2 border-t border-stone-200/80 space-y-1 text-xs text-stone-600">
@@ -2760,23 +2762,23 @@ export default function App() {
                     e.preventDefault();
                     handleSendChatQuestion();
                   }}
-                  className="p-4 border-t border-stone-200/80 flex items-center gap-3"
+                  className="p-3 sm:p-4 border-t border-stone-200/80 flex items-center gap-2 sm:gap-3"
                 >
                   <input
                     type="text"
                     value={chatInput}
                     onChange={(e) => setChatInput(e.target.value)}
                     disabled={isChatLoading}
-                    placeholder="Escribe una pregunta sobre el libro, un capítulo o una idea..."
-                    className="flex-1 px-4 py-2.5 text-sm border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600 bg-[#FAF7F2]/50"
+                    placeholder="Pregunta sobre el libro o un capítulo..."
+                    className="flex-1 min-w-0 px-3.5 sm:px-4 py-2.5 text-base sm:text-sm border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600 bg-[#FAF7F2]/50"
                   />
                   <button
                     type="submit"
                     disabled={isChatLoading || !chatInput.trim()}
-                    className="px-5 py-2.5 bg-indigo-950 hover:bg-indigo-900 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-2 whitespace-nowrap shrink-0 cursor-pointer"
+                    className="px-3.5 sm:px-5 py-2.5 bg-indigo-950 hover:bg-indigo-900 disabled:opacity-50 text-white text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5 sm:gap-2 whitespace-nowrap shrink-0 cursor-pointer"
                   >
-                    <Send className="w-3.5 h-3.5 text-amber-400" />
-                    <span>Enviar</span>
+                    <Send className="w-4 h-4 sm:w-3.5 sm:h-3.5 text-amber-400" />
+                    <span className="hidden sm:inline">Enviar</span>
                   </button>
                 </form>
               </section>
@@ -2786,11 +2788,11 @@ export default function App() {
       )}
 
       {/* =====================================================================
-          MODAL: PEGAR TEXTO DE UN LIBRO MANUALMENTE
+          MODAL: PEGAR TEXTO DE UN LIBRO MANUALMENTE (Mobile-safe scrollable)
           ===================================================================== */}
       {showManualTextModal && (
-        <div className="fixed inset-0 z-50 bg-indigo-950/50 backdrop-blur-xs flex items-center justify-center p-4 no-print">
-          <div className="bg-white border border-stone-200 rounded-2xl max-w-2xl w-full p-6 space-y-4 shadow-lg">
+        <div className="fixed inset-0 z-50 bg-indigo-950/50 backdrop-blur-xs flex items-end sm:items-center justify-center p-0 sm:p-4 no-print">
+          <div className="bg-white border border-stone-200 rounded-t-2xl sm:rounded-2xl max-w-2xl w-full max-h-[90dvh] overflow-y-auto p-5 sm:p-6 space-y-4 shadow-lg safe-area-pb">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <FileText className="w-4 h-4 text-amber-700" />
@@ -2801,7 +2803,7 @@ export default function App() {
               <button
                 type="button"
                 onClick={() => setShowManualTextModal(false)}
-                className="text-xs text-stone-500 hover:text-indigo-950 cursor-pointer"
+                className="text-xs text-stone-500 hover:text-indigo-950 cursor-pointer px-2 py-1"
               >
                 Cerrar
               </button>
@@ -2814,20 +2816,20 @@ export default function App() {
               value={manualTitleDraft}
               onChange={(e) => setManualTitleDraft(e.target.value)}
               placeholder="Título del libro"
-              className="w-full px-3.5 py-2.5 text-sm border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600"
+              className="w-full px-3.5 py-2.5 text-base sm:text-sm border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600"
             />
             <textarea
-              rows={9}
+              rows={7}
               value={manualTextDraft}
               onChange={(e) => setManualTextDraft(e.target.value)}
               placeholder="Pega aquí el texto o capítulos del libro..."
-              className="w-full p-3.5 text-sm border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600"
+              className="w-full p-3.5 text-base sm:text-sm border border-stone-300 rounded-xl focus:outline-none focus:border-amber-600"
             />
-            <div className="flex items-center justify-end gap-3">
+            <div className="flex items-center justify-end gap-2.5">
               <button
                 type="button"
                 onClick={() => setShowManualTextModal(false)}
-                className="px-4 py-2 text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg cursor-pointer"
+                className="px-4 py-2.5 text-xs font-medium text-stone-700 bg-stone-100 hover:bg-stone-200 rounded-lg cursor-pointer"
               >
                 Cancelar
               </button>
@@ -2845,7 +2847,7 @@ export default function App() {
                   setShowManualTextModal(false);
                   await runFullAiPipeline(manualTextDraft.trim(), customName);
                 }}
-                className="px-4 py-2 text-xs font-semibold text-white bg-indigo-950 hover:bg-indigo-900 rounded-lg cursor-pointer"
+                className="px-4 py-2.5 text-xs font-semibold text-white bg-indigo-950 hover:bg-indigo-900 rounded-lg cursor-pointer"
               >
                 Analizar Libro
               </button>
@@ -2855,8 +2857,8 @@ export default function App() {
       )}
 
       {/* Quiet Editorial Footer */}
-      <footer className="bg-white border-t border-stone-200/90 px-6 py-4 text-xs text-stone-500 flex flex-wrap items-center justify-between gap-4 no-print">
-        <div>LecturaViva · Estudio Visual de Análisis de Libros y Mapas de Lectura</div>
+      <footer className="bg-white border-t border-stone-200/90 px-4 sm:px-6 py-4 text-xs text-stone-500 flex flex-wrap items-center justify-between gap-3 no-print">
+        <div>LecturaViva · Estudio Visual de Libros (100% del Contenido)</div>
         {hasLoadedBook && (
           <div className="flex items-center gap-4">
             <button
@@ -2864,11 +2866,98 @@ export default function App() {
               onClick={handleExportMarkdown}
               className="hover:text-indigo-950 underline underline-offset-4 cursor-pointer"
             >
-              Descargar guía de lectura completa
+              Descargar guía completa
             </button>
           </div>
         )}
       </footer>
+
+      {/* =====================================================================
+          NATIVE-STYLE FIXED BOTTOM NAVIGATION BAR FOR MOBILE PHONES
+          Fitted 100% to phone screen width with zero horizontal overflow
+          ===================================================================== */}
+      <nav
+        aria-label="Navegación móvil"
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 bg-white/95 backdrop-blur border-t border-stone-200/90 grid grid-cols-4 px-1 pt-1.5 safe-area-pb no-print shadow-[0_-4px_16px_rgba(28,25,23,0.06)]"
+      >
+        <button
+          type="button"
+          onClick={() => handleNavigateTab('summary')}
+          className={`flex flex-col items-center justify-center gap-1 py-1.5 rounded-xl transition-colors cursor-pointer ${
+            activeTab === 'summary' ? 'text-indigo-950 font-semibold' : 'text-stone-500'
+          }`}
+        >
+          <div
+            className={`relative p-1 rounded-lg ${
+              activeTab === 'summary' ? 'bg-amber-100 text-amber-800' : ''
+            }`}
+          >
+            <BookOpen className="w-4 h-4" />
+          </div>
+          <span className="text-[11px] leading-none">Resumen</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleNavigateTab('explorer')}
+          className={`flex flex-col items-center justify-center gap-1 py-1.5 rounded-xl transition-colors cursor-pointer ${
+            activeTab === 'explorer' ? 'text-indigo-950 font-semibold' : 'text-stone-500'
+          }`}
+        >
+          <div
+            className={`relative p-1 rounded-lg ${
+              activeTab === 'explorer' ? 'bg-amber-100 text-amber-800' : ''
+            }`}
+          >
+            <Compass className="w-4 h-4" />
+            {hasLoadedBook && totalChaptersCount > 0 && (
+              <span className="absolute -top-1 -right-2.5 px-1 py-0.5 text-[9px] font-mono font-bold bg-indigo-950 text-amber-300 rounded-full leading-none">
+                {exploredChaptersCount}/{totalChaptersCount}
+              </span>
+            )}
+          </div>
+          <span className="text-[11px] leading-none">Capítulos</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleNavigateTab('quiz')}
+          className={`flex flex-col items-center justify-center gap-1 py-1.5 rounded-xl transition-colors cursor-pointer ${
+            activeTab === 'quiz' ? 'text-indigo-950 font-semibold' : 'text-stone-500'
+          }`}
+        >
+          <div
+            className={`relative p-1 rounded-lg ${
+              activeTab === 'quiz' ? 'bg-amber-100 text-amber-800' : ''
+            }`}
+          >
+            <HelpCircle className="w-4 h-4" />
+            {hasLoadedBook && totalQuestions > 0 && (
+              <span className="absolute -top-1 -right-2 px-1 py-0.5 text-[9px] font-mono font-bold bg-amber-600 text-white rounded-full leading-none">
+                {totalCorrect}/{totalQuestions}
+              </span>
+            )}
+          </div>
+          <span className="text-[11px] leading-none">Evaluación</span>
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleNavigateTab('chat')}
+          className={`flex flex-col items-center justify-center gap-1 py-1.5 rounded-xl transition-colors cursor-pointer ${
+            activeTab === 'chat' ? 'text-indigo-950 font-semibold' : 'text-stone-500'
+          }`}
+        >
+          <div
+            className={`relative p-1 rounded-lg ${
+              activeTab === 'chat' ? 'bg-amber-100 text-amber-800' : ''
+            }`}
+          >
+            <MessageSquare className="w-4 h-4" />
+          </div>
+          <span className="text-[11px] leading-none">Asistente</span>
+        </button>
+      </nav>
     </div>
   );
 }

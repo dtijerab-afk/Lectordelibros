@@ -134,7 +134,7 @@ async function startServer() {
 
       const response = await generateWithFallback({
         contents: `Realiza un estudio exhaustivo, profundo y detallado del siguiente libro o documento titulado "${fileName || 'Libro adjunto'}".
-Tu objetivo es abarcar el 90% del contenido sustancial, argumentos, matices, ejemplos, cifras y enseñanzas de la obra para que el lector comprenda el libro a profundidad capítulo por capítulo.
+Tu objetivo es abarcar el 100% del contenido sustancial, argumentos, matices, ejemplos, cifras y enseñanzas de la obra para que el lector comprenda el libro a profundidad capítulo por capítulo.
 
 Instrucciones de profundidad para cada capítulo o sección en "chapters":
 1. Extrae TODOS los capítulos o bloques temáticos principales del libro.
@@ -150,7 +150,7 @@ Instrucciones de profundidad para cada capítulo o sección en "chapters":
 CONTENIDO DEL LIBRO / DOCUMENTO:\n${truncatedText}`,
         config: {
           systemInstruction:
-            'Eres un Editor Literario y Consultor Estratégico especialista en síntesis exhaustiva de libros y su aplicación al mundo real de los negocios, el liderazgo y las empresas actuales. Tu misión es capturar el 90% del valor intelectual, narrativo y práctico del libro proporcionado, desarrollando cada capítulo con explicaciones completas de varios párrafos, definiciones precisas, casos reales y su adaptación práctica al mundo actual en español.',
+            'Eres un Editor Literario y Consultor Estratégico especialista en síntesis exhaustiva de libros y su aplicación al mundo real de los negocios, el liderazgo y las empresas actuales. Tu misión es capturar el 100% del valor intelectual, narrativo y práctico del libro proporcionado, desarrollando cada capítulo con explicaciones completas de varios párrafos, definiciones precisas, casos reales y su adaptación práctica al mundo actual en español.',
           responseMimeType: 'application/json',
           responseSchema: {
             type: Type.OBJECT,
@@ -215,7 +215,7 @@ CONTENIDO DEL LIBRO / DOCUMENTO:\n${truncatedText}`,
                     idea: { type: Type.STRING, description: 'Tesis central del capítulo explicada con claridad y contundencia.' },
                     analisisDetallado: {
                       type: Type.STRING,
-                      description: 'Desarrollo exhaustivo y profundo del capítulo en 2 a 4 párrafos detallados (separados por "\\n\\n") que abarquen el 90% de los argumentos, explicaciones y mecanismos expuestos en el capítulo.',
+                      description: 'Desarrollo exhaustivo y profundo del capítulo en 2 a 4 párrafos detallados (separados por "\\n\\n") que abarquen el 100% de los argumentos, explicaciones y mecanismos expuestos en el capítulo.',
                     },
                     historia: {
                       type: Type.STRING,
