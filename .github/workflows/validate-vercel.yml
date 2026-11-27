@@ -20,5 +20,5 @@ jobs:
           node-version: 22
       - name: Install dependencies
         run: npm install
-      - name: Build frontend and prepare Vercel assets
+      - name: Build Vite frontend
         run: npm run build
