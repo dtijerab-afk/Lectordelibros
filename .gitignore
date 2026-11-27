@@ -9,3 +9,4 @@ coverage/
 
 # Generated Vercel frontend bundle
 public/__app/
+public/index.html
