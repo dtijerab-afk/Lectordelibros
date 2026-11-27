@@ -733,18 +733,14 @@ Construye una adaptación completa que conecte directamente la teoría y ejemplo
     }
   });
 
+  // In Vercel, Vite serves the frontend as static assets from the CDN.
+  // Express handles only API requests through /api/index.ts.
   if (!process.env.VERCEL) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
     });
     app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(__dirname, 'dist');
-    app.use(express.static(distPath));
-    app.get('*', (_req, res) => {
-      res.sendFile(path.join(distPath, 'index.html'));
-    });
   }
 
   return app;
@@ -754,7 +750,7 @@ const app = await createApp();
 export default app;
 
 // Local development only. Vercel imports the Express app as a serverless function.
-if (process.env.NODE_ENV !== 'production') {
+if (!process.env.VERCEL) {
   const PORT = Number(process.env.PORT) || 3000;
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`DocuMind AI Server running on http://localhost:${PORT}`);
