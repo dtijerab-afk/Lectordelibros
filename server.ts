@@ -109,10 +109,9 @@ function formatGeminiError(err: unknown): { status: number; message: string } {
   };
 }
 
-async function startServer() {
+async function createApp() {
   const app = express();
-  const PORT = 3000;
-
+  
   app.use(express.json({ limit: '15mb' }));
 
   // 1. Endpoint: Análisis y Resumen Estructurado del Documento
@@ -748,9 +747,16 @@ Construye una adaptación completa que conecte directamente la teoría y ejemplo
     });
   }
 
+  return app;
+}
+
+const app = await createApp();
+export default app;
+
+// Local development only. Vercel imports the Express app as a serverless function.
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = Number(process.env.PORT) || 3000;
   app.listen(PORT, '0.0.0.0', () => {
     console.log(`DocuMind AI Server running on http://localhost:${PORT}`);
   });
 }
-
-startServer();
