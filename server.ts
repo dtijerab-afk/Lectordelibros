@@ -733,7 +733,7 @@ Construye una adaptación completa que conecte directamente la teoría y ejemplo
     }
   });
 
-  if (process.env.NODE_ENV !== 'production') {
+  if (!process.env.VERCEL) {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
