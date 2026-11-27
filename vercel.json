@@ -5,11 +5,5 @@
     "server.ts": {
       "includeFiles": "dist/**"
     }
-  },
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/__app/index.html"
-    }
-  ]
+  }
 }
