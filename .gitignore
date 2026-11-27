@@ -7,6 +7,3 @@ coverage/
 .env*
 !.env.example
 
-# Generated Vercel frontend bundle
-public/__app/
-public/index.html
