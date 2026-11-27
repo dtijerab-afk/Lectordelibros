@@ -2,10 +2,12 @@ import { cp, mkdir, rm } from 'node:fs/promises';
 import path from 'node:path';
 
 const source = path.resolve('dist');
-const destination = path.resolve('public', '__app');
+const publicDir = path.resolve('public');
+const assetDestination = path.join(publicDir, '__app');
 
-await rm(destination, { recursive: true, force: true });
-await mkdir(path.dirname(destination), { recursive: true });
-await cp(source, destination, { recursive: true });
+await rm(assetDestination, { recursive: true, force: true });
+await mkdir(publicDir, { recursive: true });
+await cp(source, assetDestination, { recursive: true });
+await cp(path.join(source, 'index.html'), path.join(publicDir, 'index.html'));
 
-console.log('Vite assets copied to public/__app for Vercel static delivery.');
+console.log('Vercel static assets prepared in public/.');
