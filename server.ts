@@ -2,7 +2,6 @@ import dotenv from 'dotenv';
 import express, { Request, Response } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { createServer as createViteServer } from 'vite';
 import { GoogleGenAI, Type, GenerateContentResponse, ThinkingLevel } from '@google/genai';
 
 dotenv.config();
@@ -736,6 +735,10 @@ Construye una adaptación completa que conecte directamente la teoría y ejemplo
   // In Vercel, Vite serves the frontend as static assets from the CDN.
   // Express handles only API requests through /api/index.ts.
   if (!process.env.VERCEL) {
+    // Load Vite only for local development. Importing it at module scope
+    // also loads Rolldown's native bindings, which are not needed in Vercel
+    // serverless production functions.
+    const { createServer: createViteServer } = await import('vite');
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: 'spa',
