@@ -1,10 +1,13 @@
 @import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
 
 @layer base {
   :root {
     --font-display: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-    --font-sans: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    --font-ui: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    --reading-font-family: 'Lato', -apple-system, BlinkMacSystemFont, sans-serif;
+    --reading-scale: 1;
   }
 
   html,
@@ -15,9 +18,14 @@
   }
 
   body {
-    font-family: var(--font-sans);
-    color: #1c1917;
-    background-color: #faf7f2;
+    font-family: var(--font-ui);
+    color: #0f172a;
+    background-color: #f8fafc;
+  }
+
+  .dark body {
+    color: #f1f5f9;
+    background-color: #0b1120;
   }
 
   h1, h2, h3, h4, .font-display {
@@ -29,6 +37,47 @@
     font-family: var(--font-mono);
     font-variant-numeric: tabular-nums;
   }
+}
+
+/* Reading typography & scale applied to book content, chapters, principles, chat & evaluations */
+.reading-content {
+  font-family: var(--reading-font-family);
+  font-size: calc(0.95rem * var(--reading-scale));
+  line-height: 1.72;
+}
+
+.dark .reading-content {
+  letter-spacing: 0.008em;
+}
+
+.reading-content-lg {
+  font-family: var(--reading-font-family);
+  font-size: calc(1.06rem * var(--reading-scale));
+  line-height: 1.65;
+}
+
+.dark .reading-content-lg {
+  letter-spacing: 0.008em;
+}
+
+.reading-content-sm {
+  font-family: var(--reading-font-family);
+  font-size: calc(0.875rem * var(--reading-scale));
+  line-height: 1.65;
+}
+
+.dark .reading-content-sm {
+  letter-spacing: 0.008em;
+}
+
+.reading-heading {
+  font-family: var(--reading-font-family);
+  font-size: calc(1.125rem * min(1.25, max(0.9, var(--reading-scale))));
+  line-height: 1.35;
+}
+
+.reading-title {
+  font-family: var(--reading-font-family);
 }
 
 .no-scrollbar {
@@ -47,7 +96,9 @@
   .no-print {
     display: none !important;
   }
-  body {
+  body,
+  .dark body {
+    color: #0f172a !important;
     background: #ffffff !important;
   }
 }

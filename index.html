@@ -3,17 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#faf7f2" />
-    <title>Bookapp — Estudio Visual de Libros</title>
-    <meta name="description" content="Bookapp: plataforma de estudio visual de libros con análisis profundo de capítulos, síntesis ejecutivas, ideas clave, citas y herramientas de aprendizaje." />
-    <meta property="og:title" content="Bookapp — Estudio Visual de Libros" />
-    <meta property="og:description" content="Bookapp: plataforma de estudio visual de libros con análisis profundo de capítulos, síntesis ejecutivas, ideas clave, citas y herramientas de aprendizaje." />
+    <meta name="theme-color" content="#f8fafc" />
+    <title>LecturaViva — Plataforma Integral de Lectura y Aprendizaje</title>
+    <meta name="description" content="Plataforma interactiva de lectura profunda y aprendizaje: mapas visuales, desglose capítulo por capítulo, principios y cifras clave, evaluaciones y diálogo contextual con cada libro." />
+    <meta property="og:title" content="LecturaViva — Plataforma Integral de Lectura y Aprendizaje" />
+    <meta property="og:description" content="Plataforma interactiva de lectura profunda y aprendizaje: mapas visuales, desglose capítulo por capítulo, principios y cifras clave, evaluaciones y diálogo contextual con cada libro." />
     <meta property="og:type" content="website" />
     <meta name="twitter:card" content="summary_large_image" />
-    <!-- Google Fonts: Plus Jakarta Sans (Display), DM Sans (Body), JetBrains Mono (Tabular Data & Code) -->
+    <!-- Google Fonts: UI Display (Plus Jakarta Sans), Mono (JetBrains Mono) + 5 Web Reading Fonts (Inter, Open Sans, Roboto, Lato, Merriweather; Georgia is native serif) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Lato:ital,wght@0,400;0,700;1,400&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Open+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Roboto:ital,wght@0,400;0,500;0,700;1,400&display=swap" rel="stylesheet" />
+    <!-- Prevent white flash when reloading in Dark Mode -->
+    <script>
+      (function () {
+        try {
+          var raw = localStorage.getItem('lecturaviva_reading_prefs_v1');
+          if (raw) {
+            var parsed = JSON.parse(raw);
+            if (parsed && parsed.theme === 'dark') {
+              document.documentElement.classList.add('dark');
+              var meta = document.querySelector('meta[name="theme-color"]');
+              if (meta) meta.setAttribute('content', '#0b1120');
+            }
+          }
+        } catch (e) {}
+      })();
+    </script>
     <!-- PDF.js CDN for client-side PDF text extraction -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js" crossorigin="anonymous"></script>
     <script>
@@ -22,7 +38,7 @@
       }
     </script>
   </head>
-  <body class="bg-[#FAF7F2] text-stone-900 antialiased selection:bg-amber-600 selection:text-white">
+  <body class="bg-[#F8FAFC] dark:bg-[#0B1120] text-slate-900 dark:text-slate-100 antialiased selection:bg-orange-600 selection:text-white transition-colors duration-200">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
