@@ -732,8 +732,17 @@ Construye una adaptación completa que conecte directamente la teoría y ejemplo
     }
   });
 
-  // In Vercel, Vite serves the frontend as static assets from the CDN.
-  // Express handles only API requests through /api/index.ts.
+  // In Vercel, serve the production frontend copied into /public by the build script.
+  // The Express deployment receives the root request, so it must explicitly serve
+  // the SPA entry point as well as static assets.
+  if (process.env.VERCEL) {
+    const publicDir = path.resolve(process.cwd(), 'public');
+    app.use(express.static(publicDir));
+    app.get('*', (_req: Request, res: Response) => {
+      res.sendFile(path.join(publicDir, 'index.html'));
+    });
+  }
+
   if (!process.env.VERCEL) {
     // Load Vite only for local development. Importing it at module scope
     // also loads Rolldown's native bindings, which are not needed in Vercel
