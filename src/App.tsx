@@ -607,7 +607,7 @@ export default function App() {
           }}
           className="text-base sm:text-lg font-bold tracking-tight text-indigo-950 whitespace-nowrap shrink-0 font-display"
         >
-          LecturaViva
+          Bookapp
         </a>
 
         {/* Zone 2: 4 concise single-line text navigation links */}
@@ -882,7 +882,7 @@ export default function App() {
                       Navegación por las Secciones de Estudio
                     </div>
                     <h2 className="text-lg sm:text-2xl font-bold text-indigo-950">
-                      Explora las herramientas de LecturaViva
+                      Explora las herramientas de Bookapp
                     </h2>
                   </div>
                   <span className="text-xs text-stone-500">
@@ -2858,7 +2858,7 @@ export default function App() {
 
       {/* Quiet Editorial Footer */}
       <footer className="bg-white border-t border-stone-200/90 px-4 sm:px-6 py-4 text-xs text-stone-500 flex flex-wrap items-center justify-between gap-3 no-print">
-        <div>LecturaViva · Estudio Visual de Libros (100% del Contenido)</div>
+        <div>Bookapp · Estudio Visual de Libros (100% del Contenido)</div>
         {hasLoadedBook && (
           <div className="flex items-center gap-4">
             <button
